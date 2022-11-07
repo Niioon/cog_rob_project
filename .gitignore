@@ -1,3 +1,4 @@
 .vscode
+**/.rosbags/
 src/rc_gmapping/rosbags
 src/rc_amcl/rosbags
