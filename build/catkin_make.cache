@@ -1,0 +1,2 @@
+my_map_saver
+-DCATKIN_DEVEL_PREFIX=/home/nion/cog_rob_project/devel -DCMAKE_INSTALL_PREFIX=/home/nion/cog_rob_project/install -G Unix Makefiles
