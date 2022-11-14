@@ -3,8 +3,11 @@
   <master auto="start"/>
   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
 
+
+<!-- Change this for different world -->
+
   <include file="$(find rc_simul_worlds)/launch/turtlebot3_gazebo_building.launch">
-<!--    <arg name="x_pos" value="-2.0"/>
+  <!--    <arg name="x_pos" value="-2.0"/>
     <arg name="y_pos" value="1.0"/>
     <arg name="yaw_angle" value="1.57079633"/> -->
     <remap from="base_scan" to="scan"/>
