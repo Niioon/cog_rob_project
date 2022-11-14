@@ -1,8 +1,0 @@
-prefix=/home/nion/cog_rob_project/install
-
-Name: my_map_saver
-Description: Description of my_map_saver
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

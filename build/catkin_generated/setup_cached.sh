@@ -7,4 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/nion/cog_rob_project/build'
+export PWD='/home/luka/catkin_ws_2/build'

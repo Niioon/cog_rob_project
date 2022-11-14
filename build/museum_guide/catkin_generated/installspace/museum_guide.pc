@@ -1,0 +1,8 @@
+prefix=/home/luka/catkin_ws_2/install
+
+Name: museum_guide
+Description: Description of museum_guide
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

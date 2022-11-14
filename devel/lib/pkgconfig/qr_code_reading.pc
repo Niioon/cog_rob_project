@@ -1,0 +1,8 @@
+prefix=/home/luka/catkin_ws_2/devel
+
+Name: qr_code_reading
+Description: Description of qr_code_reading
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

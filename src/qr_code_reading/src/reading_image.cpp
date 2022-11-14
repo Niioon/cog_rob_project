@@ -2,7 +2,8 @@
 #include <string>
 #include <regex>
 #include <algorithm>
- #include <codecvt>
+#include <codecvt>
+#include <boost/algorithm/string.hpp>
 
 
 #include <ros/ros.h>
@@ -34,20 +35,40 @@ using std::endl;
 bool is_there_new_artwork = false;
 std::vector<cv::KeyPoint> new_keypoints;
 std::string first_two;
+std::string to;
+std::string input;
 
 void barcodeCallback(const std_msgs::String& msg){
 //    cout << "Detected a QR Code!";
-   	std::cout << "\n";
-//    std::cout << msg.data;
+   	// std::cout << "\n";
+    std::cout << msg.data;
 	std::string::difference_type n = std::count(msg.data.begin(), msg.data.end(), '\n');
+	std::cout << "Num of lines: " << n << std::endl;
+	std::cout << "-----------" << std::endl;
+	// input = std::to_string(msg.data);
 
-	std::string hello = "Hello World"; 
-    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert;
-    std::u16string hello_word_u16 = convert.from_bytes(hello); 
-    std::string hello_world_u8 = convert.to_bytes(hello_word_u16);
+	std::istringstream iss{msg.data};
+	std::string a, b, c, d, e, f, g, h, i, j;
+	if (iss >> a >> b >> c >> d >> e >> f >> g) {
+		std::string synonym = a + b + c + d;
+		std::cout << a << b << c << d << e << f << g << std::endl;
+	} else
+		std::cerr << "your string didn't contain four whitespace separated substrings\n";
+	
 
-	std::cout << "Num of lines:" << n.substr(0, 1);
-	std:cout << n;
+
+
+	// std::string hello = "Hello World"; 
+    // std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert;
+    // std::u16string hello_word_u16 = convert.from_bytes(hello); 
+    // std::string hello_world_u8 = convert.to_bytes(hello_word_u16);
+
+
+	//Converting int to string:
+	// std::string numOfLines = std::to_string(n);
+	// std::cout << "Num of lines:" << numOfLines.substr(0, 1);
+	
+	// std:cout << n;
 	// for (int val = 1; val <= 10; ++val) {
 
 	// }

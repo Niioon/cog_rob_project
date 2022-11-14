@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/nion/cog_rob_project/src
+CMAKE_SOURCE_DIR = /home/luka/catkin_ws_2/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/nion/cog_rob_project/build
+CMAKE_BINARY_DIR = /home/luka/catkin_ws_2/build
 
 # Utility rule file for clean_test_results.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/nion/cog_rob_project/build
 include CMakeFiles/clean_test_results.dir/progress.make
 
 CMakeFiles/clean_test_results:
-	/home/nion/anaconda3/bin/python3 /opt/ros/noetic/share/catkin/cmake/test/remove_test_results.py /home/nion/cog_rob_project/build/test_results
+	/usr/bin/python3 /opt/ros/noetic/share/catkin/cmake/test/remove_test_results.py /home/luka/catkin_ws_2/build/test_results
 
 clean_test_results: CMakeFiles/clean_test_results
 clean_test_results: CMakeFiles/clean_test_results.dir/build.make
@@ -71,6 +71,6 @@ CMakeFiles/clean_test_results.dir/clean:
 .PHONY : CMakeFiles/clean_test_results.dir/clean
 
 CMakeFiles/clean_test_results.dir/depend:
-	cd /home/nion/cog_rob_project/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nion/cog_rob_project/src /home/nion/cog_rob_project/src /home/nion/cog_rob_project/build /home/nion/cog_rob_project/build /home/nion/cog_rob_project/build/CMakeFiles/clean_test_results.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/luka/catkin_ws_2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/luka/catkin_ws_2/src /home/luka/catkin_ws_2/src /home/luka/catkin_ws_2/build /home/luka/catkin_ws_2/build /home/luka/catkin_ws_2/build/CMakeFiles/clean_test_results.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/clean_test_results.dir/depend
 
