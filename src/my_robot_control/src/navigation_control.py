@@ -32,8 +32,9 @@ def main():
 
         
         # call node that exectutes instructions
-        finished = False
-        while not finished:
+
+        global finished_instructions
+        while not finished_instructions:
             rate.sleep()
 
     # done, shutdown nodes
