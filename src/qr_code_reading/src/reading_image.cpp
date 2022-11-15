@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <codecvt>
 #include <boost/algorithm/string.hpp>
+#include <boost/regex.hpp>
+#include <bits/stdc++.h>
 
 
 #include <ros/ros.h>
@@ -38,53 +40,133 @@ std::string first_two;
 std::string to;
 std::string input;
 
+ros::Publisher qr_pub;
+
+
+std::string getNumber(const std::string text)  {
+	std::string number = boost::regex_replace(
+			text,
+			boost::regex("[^0-9]*([0-9]+).*"),
+			std::string("\\1")
+			);
+	return number;
+	
+}
+
 void barcodeCallback(const std_msgs::String& msg){
 //    cout << "Detected a QR Code!";
    	// std::cout << "\n";
-    std::cout << msg.data;
-	std::string::difference_type n = std::count(msg.data.begin(), msg.data.end(), '\n');
-	std::cout << "Num of lines: " << n << std::endl;
 	std::cout << "-----------" << std::endl;
+    std::cout << msg.data << std::endl;
+	std::cout << "-----------" << std::endl;
+	// std::string::difference_type n = std::count(msg.data.begin(), msg.data.end(), '\n');
+	// std::cout << "Num of lines: " << n << std::endl;
+	// std::cout << "-----------" << std::endl;
 	// input = std::to_string(msg.data);
 
+	//Breaking message into multiple parts:
 	std::istringstream iss{msg.data};
 	std::string a, b, c, d, e, f, g, h, i, j;
-	if (iss >> a >> b >> c >> d >> e >> f >> g) {
+	if (iss >> a >> b >> c >> d >> e >> f >> g >> h >> i >> j) {
 		std::string synonym = a + b + c + d;
-		std::cout << a << b << c << d << e << f << g << std::endl;
+		std::cout  << h  << e << std::endl;
 	} else
-		std::cerr << "your string didn't contain four whitespace separated substrings\n";
+		std::cerr << "The QR message has a wrong format \n";
+
+	// if (e == "R") std::cout << "I have the first type of command " << std::endl;
+
+	if (g == "DR" && e == "R:") {
+		std::cout << "I have the first type of command " << std::endl;
+		
+		//Power
+		std::string power = getNumber(b);
+		//Energy
+		std::string energy = getNumber(d);
+		//Converting intiger to a double
+		double pwrNum = std::stod( power );
+		double enrNum = std::stod( energy );
+
+		//Calculating wait time:
+		double waitTime = enrNum/pwrNum;
+
+		// std::cout << "Robot has to wait " <<   waitTime <<  "seconds" <<std::endl;
+
+		//Couting the number of rooms to disenfect:
+		std::string::difference_type numOfRooms = std::count(f.begin(), f.end(), ',');
+		numOfRooms++;
+
+		//Seperating rooms with a space instead of commas
+		std::replace( f.begin(), f.end(), ',', ' '); 
+
+		//Concating all the peaces of info together to send it to the topic
+		std::string topicString = "1 " + std::to_string(waitTime) + " " + std::to_string(numOfRooms) + " " + f;
+		// std::cout << "Topic string is: " << topicString << std::endl;	
+
+		//ros string msg type:
+		std_msgs::String message;
+
+		//Converting topicString into char
+		char arr[topicString.length() + 1]; 
+		//Copying char into array which is later pushed to the data key of ros string message
+	    strcpy(arr, topicString.c_str());
+		//Adding the char to the message data type
+		message.data = arr;
+		//Puvlishig message to a topic channel
+		qr_pub.publish(message);
+
+
+	} else if (g == "FW:" && e == "R:") {
+		std::cout << "I have the third type of command" << std::endl;
+		
+		
+
+	} else if(e == "FWY"){
+		std::cout << "I have the second type of command" << std::endl;
+
+		//Power
+		std::string power = getNumber(b);
+		//Energy
+		std::string energy = getNumber(d);
+		//Converting intiger to a double
+		double pwrNum = std::stod( power );
+		double enrNum = std::stod( energy );
+
+		//Calculating wait time:
+		double waitTime = enrNum/pwrNum;
+
+		// std::cout << "Robot has to wait " <<   waitTime <<  "seconds" <<std::endl;
+
+		//Couting the number of rooms to disenfect:
+		std::string::difference_type numOfCoord = std::count(msg.data.begin(), msg.data.end(), '\n');
+		numOfCoord = numOfCoord-2;
+		std::cout << "Num of coordinates: " << numOfCoord << std::endl;
+
+		//Concating all the peaces of info together to send it to the topic
+		std::string topicString = "2 " + std::to_string(waitTime) + " " + std::to_string(numOfCoord) + f + g + h +  j;
+		// std::cout << "Topic string is: " << topicString << std::endl;	
+		//Replacing coordinate () - bracekets with a space 
+		std::replace( topicString.begin(), topicString.end(), '(', ' '); 
+		std::replace( topicString.begin(), topicString.end(), ')', ' '); 
+		//Replacing coordinate ,-commas with a space 
+		std::replace( topicString.begin(), topicString.end(), ',', ' '); 
+
+		//ros string msg type:
+		std_msgs::String message;
+
+		//Converting topicString into char
+		char arr[topicString.length() + 1]; 
+		//Copying char into array which is later pushed to the data key of ros string message
+	    strcpy(arr, topicString.c_str());
+		//Adding the char to the message data type
+		message.data = arr;
+		//Puvlishig message to a topic channel
+		qr_pub.publish(message);
+	}
 	
 
 
-
-	// std::string hello = "Hello World"; 
-    // std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,char16_t> convert;
-    // std::u16string hello_word_u16 = convert.from_bytes(hello); 
-    // std::string hello_world_u8 = convert.to_bytes(hello_word_u16);
-
-
-	//Converting int to string:
-	// std::string numOfLines = std::to_string(n);
-	// std::cout << "Num of lines:" << numOfLines.substr(0, 1);
-	
-	// std:cout << n;
-	// for (int val = 1; val <= 10; ++val) {
-
-	// }
-
-//    first_two = msg.data.substr(0, 2);
-//    std::cout << first_two;
-
-//    cout << msg.data;
-//    cout << "\n";
    is_there_new_artwork = true;
    
-//    json js = msg.data;
-//    auto s2 = js.get<std::string>();
-
-//    cout << js["location1"];
-
 
 }
 
@@ -174,7 +256,9 @@ int main(int argc, char **argv) {
 
 	ros::Subscriber subs_camera = nh.subscribe("/usb_cam/image_raw/compressed", 1, cameraCallback);
 
-	
+	// ros::Publisher qr_pub = nh.advertise<std_msgs::String>("qrComm", 1000);
+
+	qr_pub = nh.advertise<std_msgs::String>("qrComm", 1000);
 	
 
 	ros::Rate rate(10);
