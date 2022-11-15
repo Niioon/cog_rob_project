@@ -1,6 +1,6 @@
 # Midterm Report
 
-**Group Members**: Nion Schürmeyer, Slaven, Lukas
+**Group Members**: Nion Schürmeyer, Slaven Jevtić, Luka Levac
 
 
 ## Autonomous Exploration
@@ -14,6 +14,19 @@ In the building environment the robot does not have a problem to create a comple
 
 ## Navigation
 
+
+
+## Computer Vision
+### QR Code Reading
+For QR Code reading we are using the `zbar_ros` ros package and `reading_image` node. 
+
+The **package** uses the Zbar qrcode reader library. It subscribes to the `/image` topic and constantly looks for a qrcode in the image frame. When a qr code is recognized the it's imidiately read and the contents of the code are sent to the `/barcode` topic.
+
+**Node** that we wrote is working with those two topics. The script of the node subscribes to the to the /barcode topic and works with that info. On new data entry from the qr reader, the node takes that text and deciphers what type of a command it is (DR, FWY or FW). After that the text is broken in to a simpler format of only numbers and sent on a new topic `/qrComm`. The navigation node then listens for commands from this topic.
+
+We had some problems with the rgb camera on the turtlebot in the gazebo. There was a lot of crashing so in the end we just used the the `usb_camera` package for testing purposes as it was actually easier to just read the qr codes from the camera on the laptop.
+
+In the next steps we plan to implement *people detection* with the opencv library so the robot will turn off the lamp when a person walks in to the frame. 
 
 
 
