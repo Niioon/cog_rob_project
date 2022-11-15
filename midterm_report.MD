@@ -47,4 +47,4 @@ For lauching the qr code reading:
 
     $ rostopic echo /qrComm
 ```
-On each new  qr code read (so different text than the previous one), one message will be sent on the */qrComm* topic. The text used in the QR codes is exactly the same as in the email we got. With new lines and everything. For now the code forks for first two typed of messages just for testing purposes. 
+On each new  qr code read (so different text than the previous one), one message will be sent on the */qrComm* topic. The text used in the QR codes is exactly the same as in the email we got. With new lines and everything. For now the code works for first two typed of messages just for testing purposes. If the same QR Code is presented, nothing will be sent to the topic.
