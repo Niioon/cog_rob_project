@@ -28,10 +28,10 @@ We had some problems with the rgb camera on the turtlebot in the gazebo. There w
 
 An example of the command sent to the navigation node:
 ```
-data: "2 0.100000 3 2 4  1 5  6 3 "
+data: "2 330 3 2 4  1 5  6 3 "
 ```
  * 2 -> second type of command (FWY)
- * 0.10000 -> Wait time
+ * 330 -> Wait time in seconds
  * 3 -> Three coordinates 
  * 2 -> First x coordinarte
  * 4 -> First y coordinate
