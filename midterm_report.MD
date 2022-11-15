@@ -12,6 +12,9 @@ For launching the exploration either launch  `explore_building.launch` or `explo
 
 In the building environment the robot does not have a problem to create a complete map. In the museum environment it frequently gets stuck. We are not quite sure why but maybe the openess of the world (no walls surrounding everything) poses a problem for the explore algorithm.
 
+**Todo: Live Long Slam**
+So far we only map once and are not able to adapt to changes in the environment.
+
 ## Navigation
 
 
