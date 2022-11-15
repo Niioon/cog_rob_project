@@ -39,6 +39,7 @@ std::vector<cv::KeyPoint> new_keypoints;
 std::string first_two;
 std::string to;
 std::string input;
+std::string oldMsg;
 
 ros::Publisher qr_pub;
 
@@ -54,11 +55,15 @@ std::string getNumber(const std::string text)  {
 }
 
 void barcodeCallback(const std_msgs::String& msg){
+
 //    cout << "Detected a QR Code!";
    	// std::cout << "\n";
 	std::cout << "-----------" << std::endl;
     std::cout << msg.data << std::endl;
 	std::cout << "-----------" << std::endl;
+
+	//TODO:fix that the camera windows gets bigger on qr code in windows. It works without the if statement
+	if(oldMsg == msg.data) return;
 	// std::string::difference_type n = std::count(msg.data.begin(), msg.data.end(), '\n');
 	// std::cout << "Num of lines: " << n << std::endl;
 	// std::cout << "-----------" << std::endl;
@@ -111,7 +116,7 @@ void barcodeCallback(const std_msgs::String& msg){
 	    strcpy(arr, topicString.c_str());
 		//Adding the char to the message data type
 		message.data = arr;
-		//Puvlishig message to a topic channel
+		//Publishig message to a topic channel
 		qr_pub.publish(message);
 
 
@@ -166,6 +171,8 @@ void barcodeCallback(const std_msgs::String& msg){
 
 
    is_there_new_artwork = true;
+
+   oldMsg = msg.data;
    
 
 }
