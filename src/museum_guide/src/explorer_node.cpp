@@ -32,29 +32,29 @@ void barcodeCallback(const std_msgs::String& msg){
     /* ... */
 }
 
-//bool calculatePoseWrtMap(const std::string& frame_id, const double x, const double y, const double z, double &nx, double &ny, double &nz){
-//    
-//    static tf::TransformListener tf_listener; //!static
-//    tf::StampedTransform tf_transform;
-//    try{
-//        // the first line shouldn't be necessary in general
-//        // but during the few milliseconds in the beginning we don't have the transform yet ready
-//        tf_listener./* ... */("map", frame_id, ros::Time(0), ros::Duration(2.0));
-//        tf_listener./* ... */("map", frame_id, ros::Time(0), tf_transform);
-//    }
-//    catch(tf::TransformException& ex){
-//        ROS_ERROR_THROTTLE(0.2, "%s", ex.what());
-//        return false;
-//    }
-//
-//    tf::Vector3 v(x, y, z);
-//    v = /* ... */(v);
-//    nx = /* ... */;
-//    ny = /* ... */;
-//    nz = /* ... */;
-//
-//	return true;
-//}
+bool calculatePoseWrtMap(const std::string& frame_id, const double x, const double y, const double z, double &nx, double &ny, double &nz){
+    
+    static tf::TransformListener tf_listener; //!static
+    tf::StampedTransform tf_transform;
+    try{
+        // the first line shouldn't be necessary in general
+        // but during the few milliseconds in the beginning we don't have the transform yet ready
+        tf_listener.waitForTransform("map", frame_id, ros::Time(0), ros::Duration(2.0));
+        tf_listener.lookupTransform("map", frame_id, ros::Time(0), tf_transform);
+    }
+    catch(tf::TransformException& ex){
+        ROS_ERROR_THROTTLE(0.2, "%s", ex.what());
+        return false;
+    }
+
+    tf::Vector3 v(x, y, z);
+    v = tf_transform(v);
+    nx = v.x();
+    ny = v.y();
+    nz = v.z();
+
+	return true;
+}
 
 
 void pointcloudCallback(const sensor_msgs::PointCloud2& msg){
@@ -70,7 +70,7 @@ void pointcloudCallback(const sensor_msgs::PointCloud2& msg){
     pcl_conversions::toPCL(msg, pointcloud_t2);
     
     pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::fromPCLPointCloud2(pointcloud_t2, *pointcloud);
+    pcl::fromPCLPointCloud2(pointcloud_t2, *pointcloud); 
     std::cout << " ---------------------- \n";
     double sum_x = 0.0;
     double sum_y = 0.0;
@@ -89,7 +89,7 @@ void pointcloudCallback(const sensor_msgs::PointCloud2& msg){
     if (count == 0){
         return;
     }
-    sum_x /= count;
+   sum_x /= count;
     sum_y /= count;
     sum_z /= count;
     
@@ -100,7 +100,7 @@ void pointcloudCallback(const sensor_msgs::PointCloud2& msg){
     double nz = 0.0;
     sum_z = sum_z - 0.30;
     
-    //calculatePoseWrtMap(msg.header.frame_id, sum_x, sum_y, sum_z, nx, ny, nz);
+    calculatePoseWrtMap(msg.header.frame_id, sum_x, sum_y, sum_z, nx, ny, nz);
     
     char out_string[512];
     // format string: label, x, y, z
@@ -137,7 +137,7 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
         cv::cvtColor(color_img, gray_img, cv::COLOR_RGB2GRAY);        
         cv::SimpleBlobDetector::Params params;
         params.filterByColor = true;
-        params.minThreshold = 0;
+        params.minThreshold  = 0;
         params.maxThreshold = 200;
         cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create(params);
         
@@ -153,7 +153,7 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
 	}
 	
 	catch(cv::Exception& e){
-		ROS_ERROR("Error converting image, %s", e.what());
+	ROS_ERROR("Error converting image, %s", e.what());
 	}
 }
 
@@ -163,7 +163,7 @@ int main(int argc, char **argv){
 	ros::NodeHandle nh;
 
     ros::Subscriber subs_barcode = nh.subscribe("/barcode", 1, barcodeCallback);
-	ros::Subscriber subs_camera = nh.subscribe("/camera/rgb/image_raw/compressed", 1, cameraCallback);
+    ros::Subscriber subs_camera = nh.subscribe("/camera/rgb/image_raw/compressed", 1, cameraCallback);
     ros::Subscriber subs_pc = nh.subscribe("/camera/depth/points", 1, pointcloudCallback);
     
 

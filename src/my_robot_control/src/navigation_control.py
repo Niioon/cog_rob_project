@@ -5,7 +5,7 @@ import roslaunch
 from std_msgs.msg import String
 
 finished_instructions = False
-
+### JUST A TEMPLATE SO FAR, IGNORE PLS
 
 def callback(data):
     # topic gets called when instructions are fulfilled
