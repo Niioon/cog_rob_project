@@ -40,5 +40,11 @@ data: "2 330 3 2 4  1 5  6 3 "
 
 In the next steps we plan to implement *people detection* with the opencv library so the robot will turn off the lamp when a person walks in to the frame. 
 
+For lauching the qr code reading:
+```
+    $ roslaunch qr_code_reading image_proc.launch
+    $ rosrun qr_code_reading reading_image
 
-
+    $ rostopic echo /qrComm
+```
+On each new  qr code read (so different text than the previous one), one message will be sent on the */qrComm* topic. The text used in the QR codes is exactly the same as in the email we got. With new lines and everything. For now the code forks for first two typed of messages just for testing purposes. 
