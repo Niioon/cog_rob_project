@@ -17,7 +17,9 @@ So far we only map once and are not able to adapt to changes in the environment.
 
 ## Navigation
 
-
+For navigation we are working in museum_guide package. We launch the bringup.launch and turtlebot3_navigation files which open Gazebo and RViz. The change in those files was that we set the inital position coordinates back to (0, 0). The goal going forward is to put the starting position back to (-7.0, -2.5) and automate the 2D pose estimation in RViz (do it programatically), which we've tried by publishing the new initial coordinates to /initialpose topic, but we couldn't debug why it did not work.
+After launching, we prepared a script that publishes the desired goal to move_base_simple/goal which moves the robot to the location. We prepared the code so it iterates through 3 locations, one after another because we are planning to expand that to move to location of each QR code and after to the locations defined by the QR codes.
+The problem here was, that the script was sending the goals too soon. We implemented a condition that waits for the status of the robot to not be moving towards the goal, but the /status topic needs too long to change from one status to another, so the script skips the second defined point. We need to find a different approach to check when the robot stops moving and it successfully arrives to the desired location.
 
 ## Computer Vision
 ### QR Code Reading
