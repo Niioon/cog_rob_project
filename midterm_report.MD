@@ -24,7 +24,19 @@ The **package** uses the Zbar qrcode reader library. It subscribes to the `/imag
 
 **Node** that we wrote is working with those two topics. The script of the node subscribes to the to the /barcode topic and works with that info. On new data entry from the qr reader, the node takes that text and deciphers what type of a command it is (DR, FWY or FW). After that the text is broken in to a simpler format of only numbers and sent on a new topic `/qrComm`. The navigation node then listens for commands from this topic.
 
-We had some problems with the rgb camera on the turtlebot in the gazebo. There was a lot of crashing so in the end we just used the the `usb_camera` package for testing purposes as it was actually easier to just read the qr codes from the camera on the laptop.
+We had some problems with the rgb camera on the turtlebot in the gazebo. There was a lot of crashing so in the end we just used the the `usb_camera` package for testing purposes as it was actually easier to just read the qr codes from the laptop camera. Other than that there was mainly just text editing and converting (text to number and vice versa) done with the text from the QR Code. Time for disenfection is also calculated from the power and energy.
+
+An example of the command sent to the navigation node:
+```
+data: "2 0.100000 3 2 4  1 5  6 3 "
+```
+ * 2 -> second type of command (FWY)
+ * 0.10000 -> Wait time
+ * 3 -> Three coordinates 
+ * 2 -> First x coordinarte
+ * 4 -> First y coordinate
+ * 1 -> Second x coordinate
+ * etc.
 
 In the next steps we plan to implement *people detection* with the opencv library so the robot will turn off the lamp when a person walks in to the frame. 
 
