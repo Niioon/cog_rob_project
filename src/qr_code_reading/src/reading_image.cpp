@@ -12,7 +12,6 @@
 // #include <usb_cam/image_raw/compressed>
 #include <sensor_msgs/CompressedImage.h>
 #include <std_msgs/String.h>
-
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -22,8 +21,7 @@
 #include <opencv2/objdetect.hpp>
 #include <sstream>
 
-#include <nlohmann/json.hpp>
-using json = nlohmann::json;
+
 
 
 #include <fstream>
@@ -71,8 +69,8 @@ void barcodeCallback(const std_msgs::String& msg){
 
 	//Breaking message into multiple parts:
 	std::istringstream iss{msg.data};
-	std::string a, b, c, d, e, f, g, h, i, j;
-	if (iss >> a >> b >> c >> d >> e >> f >> g >> h >> i >> j) {
+	std::string a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, r ,s;
+	if (iss >> a >> b >> c >> d >> e >> f >> g >> h >> i >> j >> k >> l >> m >> n >> o >> p >> r >> s) {
 		std::string synonym = a + b + c + d;
 		std::cout  << h  << e << std::endl;
 	} else
@@ -123,6 +121,20 @@ void barcodeCallback(const std_msgs::String& msg){
 	} else if (g == "FW:" && e == "R:") {
 		std::cout << "I have the third type of command" << std::endl;
 		
+		//Power
+		std::string power = getNumber(b);
+		//Energy
+		std::string energy = getNumber(d);
+		//Converting intiger to a double
+		double pwrNum = std::stod( power );
+		double enrNum = std::stod( energy );
+
+		//Calculating wait time:
+		double waitTime = enrNum/pwrNum;
+
+		std::string::difference_type numOfRooms = std::count(f.begin(), f.end(), ',');
+		numOfRooms++;
+
 		
 
 	} else if(e == "FWY"){
@@ -146,8 +158,11 @@ void barcodeCallback(const std_msgs::String& msg){
 		numOfCoord = numOfCoord-2;
 		std::cout << "Num of coordinates: " << numOfCoord << std::endl;
 
-		//Concating all the peaces of info together to send it to the topic
-		std::string topicString = "2 " + std::to_string(waitTime) + " " + std::to_string(numOfCoord) + f + g + h +  j;
+		//Concating all the peaces of info together to send it to the topic j, k, l, m, n, o, p, r ,s
+		std::string topicString = "2 " + std::to_string(waitTime) + " " + std::to_string(numOfCoord) + f + g + h + i + j + k + l;
+
+		std::cout << "COncated string:" << std::endl;
+		std::cout << topicString << std::endl;
 		// std::cout << "Topic string is: " << topicString << std::endl;	
 		//Replacing coordinate () - bracekets with a space 
 		std::replace( topicString.begin(), topicString.end(), '(', ' '); 
@@ -225,24 +240,11 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
        if (new_keypoints.size()>0){
 		//We draw red color on keypoints
            cv::drawKeypoints(color_img, new_keypoints, marked_img, cv::Scalar(36,156,255)); // , cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS
-		//    cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS
+
        }
-    //    cv::resize(marked_img, marked_img, cv::Size(0, 0), 0.25, 0.25, cv::INTER_LINEAR);
+
        imshow("Current Image", marked_img);
 
-	// cv::QRCodeDetector qrDecoder = cv::QRCodeDetector();
- 
-	// cv::Mat bbox, rectifiedImage;
-	
-	// std::string data = qrDecoder.detectAndDecode(gray_img, bbox, rectifiedImage);
-
-	// if(data.length()>0) {
-	// 	display(color_img, bbox);
-	// 	// rectifiedImage.convertTo(rectifiedImage, CV_8UC3);
-	// 	// imshow("Current Image", rectifiedImage);
-	// } else {
-
-	// }
 	
 	
 
@@ -261,9 +263,8 @@ int main(int argc, char **argv) {
 
 	ros::Subscriber subs_barcode = nh.subscribe("/barcode", 1, barcodeCallback);
 
-	ros::Subscriber subs_camera = nh.subscribe("/usb_cam/image_raw/compressed", 1, cameraCallback);
+	ros::Subscriber subs_camera = nh.subscribe("/camera/rgb/image_raw/compressed", 1, cameraCallback);
 
-	// ros::Publisher qr_pub = nh.advertise<std_msgs::String>("qrComm", 1000);
 
 	qr_pub = nh.advertise<std_msgs::String>("qrComm", 1000);
 	
