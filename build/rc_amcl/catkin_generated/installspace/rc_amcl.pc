@@ -1,0 +1,8 @@
+prefix=/home/nion/cog_rob_project/install
+
+Name: rc_amcl
+Description: Description of rc_amcl
+Version: 2.1.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: amcl move_base map_server rviz turtlebot3_simulations rc_simul_worlds

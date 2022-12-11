@@ -5,4 +5,12 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
-subdirs("my_map_saver")
+subdirs("museum_guide")
+subdirs("turtlebot3_simulations/turtlebot3_simulations")
+subdirs("my_robot_control")
+subdirs("rc_simul_worlds")
+subdirs("turtlebot3_simulations/turtlebot3_fake")
+subdirs("turtlebot3_simulations/turtlebot3_gazebo")
+subdirs("p3dx_description")
+subdirs("rc_amcl")
+subdirs("rc_gmapping")

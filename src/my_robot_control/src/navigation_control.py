@@ -3,6 +3,9 @@
 import rospy
 import roslaunch
 from std_msgs.msg import String
+import nav_msgs
+from nav_msgs.srv import GetPlan
+
 
 finished_instructions = False
 ### JUST A TEMPLATE SO FAR, IGNORE PLS
@@ -18,24 +21,28 @@ def main():
 
     rospy.init_node('navigation_control')
 
-    # subscribe to qr code topic
-    rospy.Subscriber("qr_done", String, callback)
-    
+
+    locations = rospy.get_param("/locations")
+
+    print(locations[0])
+
+    ## Plan optimal ord er of visting locations
+    goal = locations[0]
+    # rospy.wait_for_service('make_plan')
+    make_plan = rospy.ServiceProxy('make_plan',GetPlan)
+    try:
+        plan = make_plan(goal[0], goal[1])
+    except rospy.ServiceException as exc:
+        print("Service did not process request: " + str(exc))    
+
+    print(plan)
+
+
     rate = rospy.Rate(1)
 
-    # hard code qr code locations here
-    qr_codes = []
+    
 
-    for qr_code in qr_codes:
-
-        # navigate to qr code
-
-        
-        # call node that exectutes instructions
-
-        global finished_instructions
-        while not finished_instructions:
-            rate.sleep()
+     
 
     # done, shutdown nodes
 

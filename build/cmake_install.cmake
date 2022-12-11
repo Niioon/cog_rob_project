@@ -131,7 +131,15 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/nion/cog_rob_project/build/gtest/cmake_install.cmake")
-  include("/home/nion/cog_rob_project/build/my_map_saver/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/museum_guide/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/turtlebot3_simulations/turtlebot3_simulations/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/my_robot_control/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/rc_simul_worlds/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/turtlebot3_simulations/turtlebot3_fake/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/turtlebot3_simulations/turtlebot3_gazebo/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/p3dx_description/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/rc_amcl/cmake_install.cmake")
+  include("/home/nion/cog_rob_project/build/rc_gmapping/cmake_install.cmake")
 
 endif()
 
