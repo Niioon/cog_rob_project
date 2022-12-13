@@ -135,7 +135,10 @@ void barcodeCallback(const std_msgs::String& msg){
 		std::string::difference_type numOfRooms = std::count(f.begin(), f.end(), ',');
 		numOfRooms++;
 
-		
+		std::replace( f.begin(), f.end(), ',', ' '); 
+
+		//Concating all the peaces of info together to send it to the topic
+		std::string topicString = "3 " + std::to_string(waitTime) + " " + std::to_string(numOfRooms) + " " + f;
 
 	} else if(e == "FWY"){
 		std::cout << "I have the second type of command" << std::endl;
