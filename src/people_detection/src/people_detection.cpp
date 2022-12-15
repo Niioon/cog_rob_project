@@ -64,20 +64,7 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
 
         //Resizing image
         resize(color_img, color_img, Size(640, 480));
-
-        // cv::Mat disp_img;
-        // //Resizing imae for display putposes
-        // cv::resize(color_img, disp_img, cv::Size(0, 0), 0.25, 0.25, cv::INTER_LINEAR);
-        // cv::imshow("Current Image", disp_img);
-
-        // vector<Rect> found, found_filtered;
-        // cv::HOGDescriptor hog;
-        // hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
-        // hog.detectMultiScale(color_img, found, 0, Size(8,8), Size(32,32), 1.05, 2);
-
-        // cout << "FOUND" << endl;
-        // cout << found << endl;
-        
+       
         
         // Just for measure time
         const clock_t begin_time = clock();
@@ -89,19 +76,41 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
         Mat img;
         Mat original;
 
+        // convert to gray image
         cv::Mat gray_img;
-        // color to gray image
         cv::cvtColor(color_img, gray_img, cv::COLOR_RGB2GRAY); 
-        // detect people, more remarks in performace section
-        detectorBody.detectMultiScale(gray_img, human, 1.04, 1, 0, Size(10, 10));
-        detectorLower.detectMultiScale(gray_img, lowerBody, 1.1, 2);
 
+
+        // detect people, more remarks in performace section
+        // detectorBody.detectMultiScale(gray_img, human, 1.09, 2, 0,  Size(120, 120), Size(600,400));
+        
+        // ---------------------   Cascade detector ----------------------------------------
+        /// @brief 
+        /// @param grayImage
+        /// @param scaleFactor
+        /// @param minNeighbors 
+        /// @param foundLocations
+        /// @param flags
+        /// @param minSize
+        /// @param maxSize
+        detectorLower.detectMultiScale(gray_img, lowerBody, 1.09, 2, 0,  Size(120, 120), Size(600,400));
+        //------------------------------------------------------------------------------------
+
+        // ---------------------   HOG detector ----------------------------------------
+        /// @brief 
+        /// @param grayImage
+        /// @param foundLocations
+        /// @param flags
+        /// @param minSize
+        /// @param maxSize
+        /// @param scaleFactor
+        /// @param minNeighbors 
         cv::HOGDescriptor hog;
         hog.setSVMDetector(cv::HOGDescriptor::getDefaultPeopleDetector());
-        hog.detectMultiScale(gray_img, found, 0, Size(10, 10), Size(100,100), 1.06, 3);
+        hog.detectMultiScale(gray_img, found, 0, Size(40, 40), Size(100,100), 1.06, 3);
         //Works good:
         // hog.detectMultiScale(gray_img, found, 0, Size(10, 10), Size(100,100), 1.06, 3);
-        // Draw results from detectorBody into original colored image
+        //------------------------------------------------------------------------------------
 
         // Draw results from detectMultiScale, default People Detector into original colored image
         if (found.size() > 0)  
@@ -135,20 +144,22 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
                 rectangle(color_img, lowerBody[gg].tl(), lowerBody[gg].br(), Scalar(255, 0, 0), 2, 8, 0);
             }
         }
-        // measure time as current - begin_time
-        clock_t diff = clock() - begin_time;
-        // convert time into string
-        char buffer[126];
-        sprintf(buffer, "%ld", diff);
-        // display TIME ms on original image
-        // putText(color_img, buffer, Point(100, 20), 1, 2, Scalar(255, 255, 255), 2, 8, 0);
-        // putText(color_img, "ms", Point(250, 20), 1, 2, Scalar(255, 255, 255), 2, 8, 0);
+
+        std_msgs::String status;
+        if(lowerBody.size() > 0 || human.size() > 0 || found.size() > 0){
+            
+            status.data = "1";
+            peoplePub.publish(status);
+        } else {
+            status.data = "0";
+            peoplePub.publish(status);
+        }
+
+
         // draw results
         namedWindow("prew", WINDOW_AUTOSIZE);
         imshow("prew", color_img);
 
-
-        int key1 = waitKey(20);
 
 	    cv::waitKey(1);
 	}
@@ -166,12 +177,8 @@ int main(int argc, char **argv) {
 
 	ros::Subscriber subs_camera = nh.subscribe("/camera/rgb/image_raw/compressed", 1, cameraCallback);
 
-
 	peoplePub = nh.advertise<std_msgs::String>("peopleDet", 1000);
 
-
-    
-	
 
 	ros::Rate rate(10);
 	while(ros::ok()){
