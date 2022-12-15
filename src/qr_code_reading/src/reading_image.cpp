@@ -136,9 +136,22 @@ void barcodeCallback(const std_msgs::String& msg){
 		numOfRooms++;
 
 		std::replace( f.begin(), f.end(), ',', ' '); 
+		std::replace( g.begin(), f.end(), 'm', ' '); 
 
 		//Concating all the peaces of info together to send it to the topic
-		std::string topicString = "3 " + std::to_string(waitTime) + " " + std::to_string(numOfRooms) + " " + f;
+		std::string topicString = "3 " + std::to_string(waitTime) + " " + std::to_string(numOfRooms) + " " + f + g;
+
+		//ros string msg type:
+		std_msgs::String message;
+
+		//Converting topicString into char
+		char arr[topicString.length() + 1]; 
+		//Copying char into array which is later pushed to the data key of ros string message
+	    strcpy(arr, topicString.c_str());
+		//Adding the char to the message data type
+		message.data = arr;
+		//Publishig message to a topic channel
+		qr_pub.publish(message);
 
 	} else if(e == "FWY"){
 		std::cout << "I have the second type of command" << std::endl;
