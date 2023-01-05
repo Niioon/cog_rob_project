@@ -93,7 +93,7 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
         /// @param flags
         /// @param minSize
         /// @param maxSize
-        detectorLower.detectMultiScale(gray_img, lowerBody, 1.09, 2, 0,  Size(120, 120), Size(600,400));
+        detectorLower.detectMultiScale(gray_img, lowerBody, 1.08, 2, 0,  Size(28, 28), Size(600,400));
         //------------------------------------------------------------------------------------
 
         // ---------------------   HOG detector ----------------------------------------
@@ -147,7 +147,6 @@ void cameraCallback(const sensor_msgs::CompressedImageConstPtr& msg){
 
         std_msgs::String status;
         if(lowerBody.size() > 0 || human.size() > 0 || found.size() > 0){
-            
             status.data = "1";
             peoplePub.publish(status);
         } else {
