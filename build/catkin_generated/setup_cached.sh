@@ -8,4 +8,3 @@
 
 # modified environment variables
 export PWD='/home/nion/cog_rob_project/build'
-export PYTHONPATH="/home/nion/catkin_ws/devel/lib/python3/dist-packages:$PYTHONPATH"

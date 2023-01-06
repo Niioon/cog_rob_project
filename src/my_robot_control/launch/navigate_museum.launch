@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<launch>
+ 
+    <!-- read set of locations the robot should disinfect-->
+    <rosparam file="$(find my_robot_control)/locations.yaml" />
+    <rosparam file="$(find my_robot_control)/room_labels.yaml"/>
+
+
+    <remap from="/image" to="/camera/rgb/image_raw"/>
+
+    <node pkg="zbar_ros" type="barcode_reader_node" name="barcode_reader_node"/>
+    <node pkg="people_detection" type="people_detection" name="people_detection"/>
+
+    <node pkg="map_server" type="map_server" name="map_server" args="$(find museum_guide)/world/map_01.yaml"/>
+
+    <include file="$(find museum_guide)/launch/amcl.launch">
+        <arg name="initial_pose_x" default="0.0"/>
+        <arg name="initial_pose_y" default="0.0"/>
+        <arg name="initial_pose_a" default="0.0"/>
+    </include>
+
+
+    <!-- <include file="$(find museum_guide)/launch/move_base.launch"/> -->
+
+    <include file="$(find museum_guide)/launch/museum_small.launch"/>
+
+    <!-- Arguments -->
+    <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="map_file" default="$(find turtlebot3_navigation)/maps/map.yaml"/>
+    <arg name="open_rviz" default="true"/>
+    <arg name="move_forward_only" default="false"/>
+
+    <!-- Turtlebot3 -->
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+        <arg name="model" value="$(arg model)" />
+    </include>
+
+    <!-- Map server -->
+    <!-- node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/-->
+ 
+    <!-- AMCL -->
+    <!-- <include file="$(find turtlebot3_navigation)/launch/amcl.launch"/> -->
+
+    <!-- move_base -->
+    <include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+        <arg name="model" value="$(arg model)" />
+        <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+    </include> 
+
+    <!-- rviz -->
+    <group if="$(arg open_rviz)"> 
+        <node pkg="rviz" type="rviz" name="rviz" required="true"
+            args="-d $(find turtlebot3_navigation)/rviz/turtlebot3_navigation.rviz"/>
+    </group>
+
+    <!-- <node type="navigation_control.py" name="navigation_control" pkg="my_robot_control" output="screen"/> --> 
+
+
+</launch>

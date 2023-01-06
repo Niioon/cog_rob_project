@@ -1,0 +1,8 @@
+prefix=/home/nion/cog_rob_project/install
+
+Name: navigation_goals_pyt
+Description: Description of navigation_goals_pyt
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

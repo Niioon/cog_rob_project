@@ -65,6 +65,7 @@
       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/local_costmap_params.yaml" command="load" />
       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/global_costmap_params.yaml" command="load" />
       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/move_base_params.yaml" command="load" />
+  
       <rosparam file="$(find rc_simul_worlds)/params/turtlebot3/dwa_local_planner_params.yaml" command="load" />
     </node>
 

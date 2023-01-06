@@ -41,8 +41,8 @@ ros::Publisher peoplePub;
 CascadeClassifier detectorBody;
 CascadeClassifier detectorLower;
 // !! Put your cascade or opencv cascede into project folder !!
-string bodyCascade = "/home/luka/catkin_ws/src/people_detection/cascades/body.xml";
-string lowerBodyCascade = "/home/luka/catkin_ws/src/people_detection/cascades/lowerBody.xml";
+string bodyCascade = "/home/nion/cog_rob_project/src/people_detection/cascades/body.xml";
+string lowerBodyCascade = "/home/nion/cog_rob_project/src/people_detection/cascades/lowerBody.xml";
 // Load cascade into CascadeClassifier
 bool loaded1 = detectorBody.load(bodyCascade);
 bool loaded3 = detectorLower.load(lowerBodyCascade);

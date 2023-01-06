@@ -1,0 +1,8 @@
+prefix=/home/nion/cog_rob_project/install
+
+Name: estop
+Description: Description of estop
+Version: 2.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp std_msgs std_srvs
