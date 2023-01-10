@@ -175,7 +175,7 @@ void barcodeCallback(const std_msgs::String& msg){
 		std::cout << "Num of coordinates: " << numOfCoord << std::endl;
 
 		//Concating all the peaces of info together to send it to the topic j, k, l, m, n, o, p, r ,s
-		std::string topicString = "2 " + std::to_string(waitTime) + " " + std::to_string(numOfCoord) + f + g + h + i + j + k + l;
+		std::string topicString = "2 " + std::to_string(waitTime) + " " + std::to_string(numOfCoord) + f + g + h + i + j + k + l + m + n + o + p + r + s;
 
 		std::cout << "COncated string:" << std::endl;
 		std::cout << topicString << std::endl;
